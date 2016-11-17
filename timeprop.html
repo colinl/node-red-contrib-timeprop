@@ -1,0 +1,78 @@
+<!--
+  Copyright 2016 Colin Law
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/javascript">
+    RED.nodes.registerType('timeprop',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            cycleTime: {value: 600, required: true},
+            deadTime: {value: 0, required: true},
+            triggerPeriod: {value: 10, required: true},
+            invert: {value: false}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "function.png",
+        label: function() {
+            return this.name||"timeprop";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="timeprop">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-cycleTime"><i class="icon-tag"></i> Cycle time(secs)</label>
+        <input type="text" id="node-input-cycleTime" placeholder="Cycle Time">
+    </div>
+    <div class="form-row">
+        <label for="node-input-deadTime"><i class="icon-tag"></i> Actuator dead time (secs)</label>
+        <input type="text" id="node-input-deadTime" placeholder="Dead time">
+    </div>
+    <div class="form-row">
+        <label for="node-input-triggerPeriod"><i class="icon-tag"></i> Trigger period (secs)</label>
+        <input type="text" id="node-input-triggerPeriod" placeholder="Trigger period">
+    </div>
+    <div class="form-row">
+        <label for="node-input-invert"><i class="icon-tag"></i> Invert output</label>
+        <input type="checkbox" id="node-input-invert" placeholder="" style="display: inline-block; width: auto; vertical-align: top;">
+    </div>
+ </script>
+
+<script type="text/x-red" data-help-name="timeprop">
+    <p>A node that generates a time proportioned output from a linear input.</p>
+    
+    <p>Given a required power value in <b>msg.payload</b> in the range 0.0 to 1.0 this node generates a time proportioned 0/1 output (representing OFF/ON) which averages to required power value. The signal is output in <b>msg.payload</b>.  It uses a configurable cycle time, so if, for example, the period is set to 10 minutes and the power input is 0.2 then the output would be on for two minutes in every ten minutes.</p>
+    
+    <p>The configuration parameters are as follows:</p>
+    <ul>
+    
+      <li><b>Cycle time</b> - This is the cycle time of the time proportioned output as described above.</li>
+      
+      <li><b>Actuator dead time</b> - This can be used to specify the time (in seconds) that the actuator or other device takes to respond when told to go from ON to OFF or vice versa. The algorithm allows for this and will not ask the device to open/close for too short a time, in order to avoid it being told to open and then close again before it has responded to the first request. If the time to switch on is different to that switching off again then add the two times together and divide by two to get the value to enter. Set this to 0 to disable this feature.</li>
+      
+      <li><b>Trigger period</b> - This tells the node how often to determine what state the output should be set to.  I generally set this to about 1% of the cycle time, so for a 10 minute cycle time I would set this to around 6 seconds.</li>
+      
+      <li><b>Invert</b> - This allows the output to be inverted, so that a 0 output indicates full power, and 1 indicates no power. This is useful if, for example, the output is connected to an active low signal such as that used to drive a relay connected to a GPIO pin on a Raspberry Pi</li>
+
+    </ul>
+    
+</script>
