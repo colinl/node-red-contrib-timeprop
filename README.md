@@ -29,10 +29,6 @@ Configuration
       
   * **Invert** - This allows the output to be inverted, so that a 0 output indicates full power, and 1 indicates no power. This is useful if, for example, the output is connected to an active low signal such as that used to drive a relay connected to a GPIO pin on a Raspberry Pi
 
-  * **Setpoint** - This is the process value that the process is aiming for. It may be setup either in the configuration of the node or by passing the node a message with **msg.topic** set to `setpoint` and **msg.payload** set to the required floating point value.
-
-  * **Proportional band** - This controls the gain of the loop and is the range of process value over which the power output will go from 0 to full power. The units are that of the process and setpoint, so for example in a heating application it might be set to 1.5 degrees. It may be setup either in the configuration of the node or by passing the node a message with **msg.topic** set to `prop_band` and **msg.payload** set to the required floating point value.
-
 
 [Node-RED]:  http://nodered.org/
 
